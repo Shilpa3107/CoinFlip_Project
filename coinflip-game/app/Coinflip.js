@@ -9,19 +9,25 @@ export default function Coinflip({ account, web3 }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const flipCoin = async () => {
+    // Validate input
     if (!bet || isNaN(bet) || bet <= 0) {
       alert('Please enter a valid bet amount.');
       return;
     }
-    
+
+    // Disable button during processing
     setIsLoading(true);
     setResult(null);
 
     try {
       // Simulate coin flip
       const flipResult = Math.random() > 0.5 ? 'heads' : 'tails';
+      console.log('Coin Flip Result:', flipResult);
+
+      // Check if user won
       const win = flipResult === side;
-      
+
+      // Update result based on outcome
       if (win) {
         setResult(`You Win! ${bet} ETH has been added to your account.`);
         // Simulate token transfer here
@@ -33,6 +39,7 @@ export default function Coinflip({ account, web3 }) {
       console.error('Error flipping coin:', error);
       setResult('An error occurred. Please try again.');
     } finally {
+      // Re-enable button after processing
       setIsLoading(false);
     }
   };
