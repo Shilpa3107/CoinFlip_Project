@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Web3 from 'web3';
 
 export default function Coinflip({ account, web3 }) {
   const [side, setSide] = useState('heads');
@@ -9,23 +8,33 @@ export default function Coinflip({ account, web3 }) {
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log('Coinflip Props:', { account, web3 });
-
   const flipCoin = async () => {
+    if (!bet || isNaN(bet) || bet <= 0) {
+      alert('Please enter a valid bet amount.');
+      return;
+    }
+    
     setIsLoading(true);
+    setResult(null);
+
     try {
+      // Simulate coin flip
       const flipResult = Math.random() > 0.5 ? 'heads' : 'tails';
       const win = flipResult === side;
-      setResult(win ? 'You Win!' : 'You Lose!');
       
       if (win) {
-        // Simulate token transfer (update this with real logic if needed)
-        console.log(`Winning! Transfer ${bet} ETH to ${account}`);
+        setResult(`You Win! ${bet} ETH has been added to your account.`);
+        // Simulate token transfer here
+        console.log(`Simulate transferring ${bet} ETH to ${account}`);
+      } else {
+        setResult('You Lose!');
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error flipping coin:', error);
+      setResult('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
